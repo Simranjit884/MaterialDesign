@@ -2,52 +2,35 @@ import React,{Component} from 'react';
 import AutoComplete from 'material-ui/AutoComplete';
 import getMuiTheme        from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider   from 'material-ui/styles/MuiThemeProvider';
-import Companies from '../data.json';
+//import Companies from '../data.json';
+import {connect} from 'react-redux';
+import {getlist} from '../actions';
+import {Link} from 'react-router-dom';
 
-
-const colors=Companies.map(company=>company.aliasName);
-/*
-const fruit = [
-  'Apple', 'Apricot', 'Avocado',
-  'Banana', 'Bilberry', 'Blackberry', 'Blackcurrant', 'Blueberry',
-  'Boysenberry', 'Blood Orange',
-  'Cantaloupe', 'Currant', 'Cherry', 'Cherimoya', 'Cloudberry',
-  'Coconut', 'Cranberry', 'Clementine',
-  'Damson', 'Date', 'Dragonfruit', 'Durian',
-  'Elderberry',
-  'Feijoa', 'Fig',
-  'Goji berry', 'Gooseberry', 'Grape', 'Grapefruit', 'Guava',
-  'Honeydew', 'Huckleberry',
-  'Jabouticaba', 'Jackfruit', 'Jambul', 'Jujube', 'Juniper berry',
-  'Kiwi fruit', 'Kumquat',
-  'Lemon', 'Lime', 'Loquat', 'Lychee',
-  'Nectarine',
-  'Mango', 'Marion berry', 'Melon', 'Miracle fruit', 'Mulberry', 'Mandarine',
-  'Olive', 'Orange',
-  'Papaya', 'Passionfruit', 'Peach', 'Pear', 'Persimmon', 'Physalis', 'Plum', 'Pineapple',
-  'Pumpkin', 'Pomegranate', 'Pomelo', 'Purple Mangosteen',
-  'Quince',
-  'Raspberry', 'Raisin', 'Rambutan', 'Redcurrant',
-  'Salal berry', 'Satsuma', 'Star fruit', 'Strawberry', 'Squash', 'Salmonberry',
-  'Tamarillo', 'Tamarind', 'Tomato', 'Tangerine',
-  'Ugli fruit',
-  'Watermelon',
-];
-*/
-/**
- * Two examples of filtering. The first uses `caseInsensitiveFilter`, the second uses `fuzzyFilter`,
- * and limits the number of results displayed using the `maxSearchResults` property.
- */
+//const colors=Companies.map(company=>company.aliasName);
+//const temp=Companies.map(function(company){return {id:company.id,name:company.aliasName};});
+//console.log(temp);
 class AutoCompleteExampleFilters extends Component{
+  componentDidMount(){
+    this.props.getlist();
+    console.log("this is a getlist func:",this.props.getlist());
+  }
+  onrequesthandle(chosenRequest,index){
+    return <Link to={"/companies/list"}>{chosenRequest}</Link>
+  }
   render(){
+    const temp=this.props.Companies.map(company=>company.aliasName);;
       return <MuiThemeProvider muiTheme={getMuiTheme()}> 
         <AutoComplete
             floatingLabelText="Name"
             filter={AutoComplete.caseInsensitiveFilter}
-            dataSource={colors}
+            dataSource={temp}
+            onNewRequest={this.onrequesthandle.bind(this)}
         />
         </MuiThemeProvider>
       }
     }
-
-export default AutoCompleteExampleFilters;
+    function mapStateToProps(state){
+      return {Companies:state.comp}
+    }
+export default connect(mapStateToProps,{getlist})(AutoCompleteExampleFilters);
