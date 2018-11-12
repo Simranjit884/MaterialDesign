@@ -1,12 +1,25 @@
 import React,{Component} from 'react';
+import {connect} from 'react-redux';
+import {getlist} from '../actions';
+
 
 class Companies extends Component{
+    componentDidMount(){
+        this.props.getlist();
+    }
     render(){
+        if(!this.props.company) return <div>Loading...</div>
+        const {id}=this.props.match.params;
+        let name=this.props.company.filter(element=>element.id===id);
         return (
             <div>
-             this component is for an array of Companies.
+                id is={id}         
             </div>
         );
     }   
 }
-export default Companies;
+
+function mapStateToProps({comp}){
+    return {company:comp};
+}
+export default connect(mapStateToProps,{getlist})(Companies);

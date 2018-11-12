@@ -8,8 +8,10 @@ import App from './components/App';
 import AutoCompleteExampleFilters from './components/autocompleteexample';
 import Reducers from './reducers';
 import companies from './components/companies';
+import ReduxThunk from 'redux-thunk';
 
-const createStoreWithMiddleware=applyMiddleware()(createStore);
+
+const createStoreWithMiddleware=applyMiddleware(ReduxThunk)(createStore);
 
 ReactDOM.render(
     <Provider store={createStoreWithMiddleware(Reducers)}>
@@ -17,7 +19,7 @@ ReactDOM.render(
         <div>
             <Switch>
             <Route path="/companies/list" component={AutoCompleteExampleFilters} />
-            <Route path="Companies/:id" component={companies} />
+            <Route path="/companies/:id" component={companies} />
             <Route path="/" component={App} />
             </Switch>
         </div>
